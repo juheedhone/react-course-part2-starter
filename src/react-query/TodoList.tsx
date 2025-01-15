@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
 
 interface Todo {
   id: number;
@@ -10,18 +9,21 @@ interface Todo {
 }
 
 const TodoList = () => {
- const fetchTodos = () =>
-   axios
-     .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
-     .then((res) => res.data);
+  const fetchTodos = () =>
+    axios
+      .get<Todo[]>("https://jsonplaceholder.typicode.com/todos")
+      .then((res) => res.data);
 
-  const {data : todos, error} = useQuery<Todo[],Error>({
+  const {
+    data: todos,
+    error,
+    isLoading,
+  } = useQuery<Todo[], Error>({
     queryKey: ["todos"],
-    queryFn: fetchTodos
+    queryFn: fetchTodos,
   });
 
- 
-  
+  if (isLoading) return <p>Loading...</p>;
 
   if (error) return <p>{error.message}</p>;
 
